@@ -66,13 +66,23 @@ const DataTable = () => {
             </thead>
 
             <tbody>
+              <tr>
+                <td>Ashiq</td>
+                <td>Male</td>
+                <td>24</td>
 
+                <td>
+                  <button className='edit'>Edit</button>
+                  <button className='delete'>Delete</button>
+                </td>
+              </tr>
             </tbody>
 
             
           </table>
 
           {/* pagination here */}
+          <div className="pagination"></div>
         </div>
       </div>
 
