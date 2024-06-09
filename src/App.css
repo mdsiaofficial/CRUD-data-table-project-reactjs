@@ -39,7 +39,7 @@ button {
   margin: 8px 0;
   box-sizing: border-box;
   font-family: cursive;
-  
+  color: black;
   border-radius: 10px;
 }
 
@@ -58,9 +58,14 @@ button {
   margin: 3px;
 }
 
-
+.search-table-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .search-input{
-  /* width: 200px ; */
+  width: 200px ;
 }
 
 .search-table-container{
@@ -71,14 +76,14 @@ button {
 
 table {
   border-collapse: collapse;
-  margin-top: 20px;
+  margin: 20px;
 }
 
 table td,
 table th{
   border: 1px solid #ddd;
   padding: 10px;
-  /* max-width: 360px; */
+  max-width: 360px;
   word-wrap: break-word;
   text-align: left;
   color:bisque ;
@@ -98,12 +103,48 @@ tr th {
 }
 
 table th{
-  padding: 12px 0;
+  padding: 10px;
   text-align: left;
   background-color: bisque;
   color: slateblue;
+  font-weight: 500;
 }
 
-table thead tr th{
-  
+.actions{
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.edit {
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: uppercase;
+}
+
+.delete{
+  background-color: red;
+  color: white;
+  text-decoration: uppercase;
+}
+
+
+
+@media screen and (max-width: 600px) {
+  tr th {
+    min-width: unset;
+  }
+
+  table td{
+    font-size: 14px;
+  }
+
+  .actions{
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+
+  button{
+    margin: 3px 0;
+  }
 }

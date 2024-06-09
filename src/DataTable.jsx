@@ -1,7 +1,21 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 
 const DataTable = () => {
+
+
+  const [formData, setFormData] = useState({
+    name: "",
+    gender: "",
+    age: ""
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({...formData, [e.target.name]: e.target.value,})
+  }
+
+  console.log(formData);
+
   return (
     <div>
       <div className="container">
@@ -13,8 +27,8 @@ const DataTable = () => {
               type="text"
               placeholder='Name'
               name='name'
-              value={""}
-              onChange={() => { }}
+              value={formData.name}
+              onChange={handleInputChange}
             />
 
 
@@ -23,8 +37,8 @@ const DataTable = () => {
               type="text"
               placeholder='Gender'
               name='gender'
-              value={""}
-              onChange={() => { }}
+              value={formData.gender}
+              onChange={handleInputChange}
             />
 
             {/* Age */}
@@ -32,8 +46,8 @@ const DataTable = () => {
               type="text"
               placeholder='Age'
               name='age'
-              value={""}
-              onChange={() => { }}
+              value={formData.age}
+              onChange={handleInputChange}
             />
 
           </div>
@@ -71,7 +85,7 @@ const DataTable = () => {
                 <td>Male</td>
                 <td>24</td>
 
-                <td>
+                <td className='actions'>
                   <button className='edit'>Edit</button>
                   <button className='delete'>Delete</button>
                 </td>
