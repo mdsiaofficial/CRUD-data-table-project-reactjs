@@ -33,8 +33,13 @@ const DataTable = () => {
       setFormData({ name: "", gender: "", age: "" });
     }
   }
+
+  const handleDelete = (id) => {
+    const updatedList = data.filter((item) => item.id !== id);
+    setData(updatedList);
+  }
   // console.log(formData);
-  console.log(data);
+  // console.log(data);
 
   return (
     <div>
@@ -51,7 +56,7 @@ const DataTable = () => {
               onChange={handleInputChange}
             />
 
-            
+
             {/* Gender */}
             <input
               type="text"
@@ -100,9 +105,9 @@ const DataTable = () => {
             </thead>
 
             <tbody>
-              
-{/* 
-              <tr>
+              {/* hard code removed */}
+
+              {/*<tr>
                 <td>Ashiq</td>
                 <td>Male</td>
                 <td>24</td>
@@ -111,13 +116,31 @@ const DataTable = () => {
                   <button className='edit'><MdEdit /></button>
                   <button className='delete'><MdDelete /></button>
                 </td>
-              </tr> 
-*/}
+              </tr> */}
+
+              {
+                data.map((item) => (
+                  <tr key={item.id}>
+                    <td key={item.id}>{item.name}</td>
+                    <td key={item.id}>{item.gender}</td>
+                    <td key={item.id}>{item.age}</td>
+
+                    <td className='actions'>
+                      <button className='edit'>
+                        <MdEdit />
+                      </button>
+                      <button className='delete' onClick={() => handleDelete(item.id)}>
+                        <MdDelete />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              }
 
 
             </tbody>
 
-            
+
           </table>
 
           {/* pagination here */}

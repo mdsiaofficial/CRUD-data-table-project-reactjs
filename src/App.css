@@ -1,5 +1,5 @@
 body{
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: 'Times New Roman', Times, serif, Verdana, Geneva, Tahoma, sans-serif;
   background-color: slateblue;
   color: whitesmoke;
 }
@@ -38,7 +38,7 @@ button {
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
-  font-family: cursive;
+  /* font-family: cursive; */
   color: black;
   border-radius: 10px;
 }
