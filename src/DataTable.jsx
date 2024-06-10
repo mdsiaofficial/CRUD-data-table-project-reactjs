@@ -1,7 +1,6 @@
 
-import React, { useState } from 'react'
-import { GiCrossMark } from 'react-icons/gi';
-import { AiFillCheckCircle } from 'react-icons/ai';
+import React, { useEffect, useState } from 'react'
+
 import { MdEdit } from 'react-icons/md';
 import { MdDelete } from 'react-icons/md';
 const DataTable = () => {
@@ -12,10 +11,14 @@ const DataTable = () => {
     gender: "",
     age: ""
   });
-
   const [data, setData] = useState([]);
+  const [editId, setEditId] = useState(false);
+  useEffect(() => {
+    if (!editId) return;
 
-
+    let selectedItem = document.querySelectorAll(`[id='${editId}']`);
+    selectedItem[0].focus();
+  }, [editId]);
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value, })
   };
@@ -119,14 +122,14 @@ const DataTable = () => {
               </tr> */}
 
               {
-                data.map((item) => (
+                data ? (data.map((item) => (
                   <tr key={item.id}>
-                    <td key={item.id}>{item.name}</td>
-                    <td key={item.id}>{item.gender}</td>
-                    <td key={item.id}>{item.age}</td>
+                    <td key={item.id} contentEditable={editId === item.id}>{item.name}</td>
+                    <td key={item.id} contentEditable={editId === item.id}>{item.gender}</td>
+                    <td key={item.id} contentEditable={editId === item.id}>{item.age}</td>
 
                     <td className='actions'>
-                      <button className='edit'>
+                      <button className='edit' onClick={() => setEditId(item.id)}>
                         <MdEdit />
                       </button>
                       <button className='delete' onClick={() => handleDelete(item.id)}>
@@ -134,7 +137,7 @@ const DataTable = () => {
                       </button>
                     </td>
                   </tr>
-                ))
+                ))) : null
               }
 
 
