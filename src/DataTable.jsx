@@ -43,7 +43,9 @@ const DataTable = () => {
   }
   // console.log(formData);
   // console.log(data);
-
+  const handleEdit = (id) => {
+    
+  }
   return (
     <div>
       <div className="container">
