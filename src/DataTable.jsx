@@ -1,6 +1,9 @@
 
 import React, { useState } from 'react'
-
+import { GiCrossMark } from 'react-icons/gi';
+import { AiFillCheckCircle } from 'react-icons/ai';
+import { MdEdit } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
 const DataTable = () => {
 
 
@@ -10,11 +13,28 @@ const DataTable = () => {
     age: ""
   });
 
-  const handleInputChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value,})
-  }
+  const [data, setData] = useState([]);
 
-  console.log(formData);
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value, })
+  };
+
+  const handleAddClick = () => {
+    if (formData.name && formData.gender && formData.age) {
+      const newItem = {
+        id: Date.now(),
+        name: formData.name,
+        gender: formData.gender,
+        age: formData.age,
+      };
+
+      setData([...data, newItem]);
+      setFormData({ name: "", gender: "", age: "" });
+    }
+  }
+  // console.log(formData);
+  console.log(data);
 
   return (
     <div>
@@ -31,7 +51,7 @@ const DataTable = () => {
               onChange={handleInputChange}
             />
 
-
+            
             {/* Gender */}
             <input
               type="text"
@@ -53,7 +73,7 @@ const DataTable = () => {
           </div>
 
           {/* add button for adding data */}
-          <button className='add'>Add</button>
+          <button className='add' onClick={handleAddClick}>Add</button>
         </div>
 
         <div className="search-table-container">
@@ -80,16 +100,21 @@ const DataTable = () => {
             </thead>
 
             <tbody>
+              
+{/* 
               <tr>
                 <td>Ashiq</td>
                 <td>Male</td>
                 <td>24</td>
 
                 <td className='actions'>
-                  <button className='edit'>Edit</button>
-                  <button className='delete'>Delete</button>
+                  <button className='edit'><MdEdit /></button>
+                  <button className='delete'><MdDelete /></button>
                 </td>
-              </tr>
+              </tr> 
+*/}
+
+
             </tbody>
 
             
