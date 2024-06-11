@@ -8,13 +8,13 @@ const DataTable = () => {
     age: "",
   });
   const [data, setData] = useState([]);
-  const [editId, setEditId] = useState(false);
-  useEffect(() => {
-    if (!editId) return;
 
-    let selectedItem = document.querySelectorAll(`[id='${editId}']`);
-    selectedItem[0].focus();
-  }, [editId]);
+  const [edit, setEdit] = useState({
+    editable: false,
+    id: null,
+    updateData: {},
+  });
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -36,12 +36,27 @@ const DataTable = () => {
   const handleDelete = (id) => {
     const updatedList = data.filter((item) => item.id !== id);
     setData(updatedList);
-  }
-  // console.log(formData);
-  // console.log(data);
-  const handleEdit = (id) => {
-    
-  }
+  };
+
+  const editHandler = (item) => {
+    setEdit({ editable: true, id: item.id, updateData: item });
+  };
+
+  const saveEdit = (id) => {
+    const updatedData = data.map((item) =>
+      item.id === id ? { ...item, ...edit.updateData } : item
+    );
+    setData(updatedData);
+    setEdit({ editable: false, id: null, updateData: {} });
+  };
+
+  const handleEditChange = (e, key) => {
+    setEdit((prev) => ({
+      ...prev,
+      updateData: { ...prev.updateData, [key]: e.target.innerText },
+    }));
+  };
+
   return (
     <div>
       <div className="container">
@@ -93,28 +108,48 @@ const DataTable = () => {
               </tr>
             </thead>
             <tbody>
-              {/* hard code removed */}
-
-              {/*<tr>
-                <td>Ashiq</td>
-                <td>Male</td>
-                <td>24</td>
-
-                <td className='actions'>
-                  <button className='edit'><MdEdit /></button>
-                  <button className='delete'><MdDelete /></button>
-                </td>
-              </tr> */}
-
-              {
-                data ? (data.map((item) => (
-                  <tr key={item.id}>
-                    <td key={item.id} contentEditable={editId === item.id}>{item.name}</td>
-                    <td key={item.id} contentEditable={editId === item.id}>{item.gender}</td>
-                    <td key={item.id} contentEditable={editId === item.id}>{item.age}</td>
-
-                    <td className='actions'>
-                      <button className='edit' onClick={() => setEditId(item.id)}>
+              {data.map((item) => (
+                <tr key={item.id}>
+                  <td
+                    contentEditable={edit.editable && edit.id === item.id}
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) => handleEditChange(e, "name")}
+                  >
+                    {edit.editable && edit.id === item.id
+                      ? edit.updateData.name
+                      : item.name}
+                  </td>
+                  <td
+                    contentEditable={edit.editable && edit.id === item.id}
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) => handleEditChange(e, "gender")}
+                  >
+                    {edit.editable && edit.id === item.id
+                      ? edit.updateData.gender
+                      : item.gender}
+                  </td>
+                  <td
+                    contentEditable={edit.editable && edit.id === item.id}
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) => handleEditChange(e, "age")}
+                  >
+                    {edit.editable && edit.id === item.id
+                      ? edit.updateData.age
+                      : item.age}
+                  </td>
+                  <td className="actions">
+                    {edit.editable && edit.id === item.id ? (
+                      <button
+                        className="save edit"
+                        onClick={() => saveEdit(item.id)}
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        className="edit"
+                        onClick={() => editHandler(item)}
+                      >
                         <MdEdit />
                       </button>
                     )}
