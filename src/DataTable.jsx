@@ -13,12 +13,14 @@ const DataTable = () => {
   });
   const [data, setData] = useState([]);
   const [editId, setEditId] = useState(false);
+
   useEffect(() => {
     if (!editId) return;
-
-    let selectedItem = document.querySelectorAll(`[id='${editId}']`);
-    selectedItem[0].focus();
+    // Find all elements in the document that have an id attribute equal to the editId value
+    let selectedItem = document.querySelectorAll(`[id="${editId}"]`);
+    // selectedItem[0].focus();
   }, [editId]);
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value, })
   };
@@ -43,9 +45,16 @@ const DataTable = () => {
   }
   // console.log(formData);
   // console.log(data);
-  const handleEdit = (id) => {
-    
+  const handleEdit = (id, updatedData) => {
+    if (!editId || editId !== id) return;
+
+    const updatedList = data.map((item) => (
+      item.id === id ? { ...item, ...updatedData } : item
+    ));
+
+    setData(updatedList);
   }
+  console.log(data);
   return (
     <div>
       <div className="container">
@@ -126,9 +135,24 @@ const DataTable = () => {
               {
                 data ? (data.map((item) => (
                   <tr key={item.id}>
-                    <td key={item.id} contentEditable={editId === item.id}>{item.name}</td>
-                    <td key={item.id} contentEditable={editId === item.id}>{item.gender}</td>
-                    <td key={item.id} contentEditable={editId === item.id}>{item.age}</td>
+                    <td
+                      key={item.id}
+                      contentEditable={editId === item.id}
+                      onBlur={(e) => handleEdit(
+                        item.id, {name: e.target.innerText})}
+                    >{item.name}</td>
+                    <td
+                      key={item.id}
+                      contentEditable={editId === item.id}
+                      onBlur={(e) => handleEdit(
+                        item.id, {gender: e.target.innerText})}
+                    >{item.gender}</td>
+                    <td
+                      key={item.id}
+                      contentEditable={editId === item.id}
+                      onBlur={(e) => handleEdit(
+                        item.id, {age: e.target.innerText})}
+                    >{item.age}</td>
 
                     <td className='actions'>
                       <button className='edit' onClick={() => setEditId(item.id)}>
