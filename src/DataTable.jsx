@@ -1,28 +1,22 @@
+import React, { useState } from "react";
+import { MdEdit, MdDelete } from "react-icons/md";
 
-import React, { useEffect, useState } from 'react'
-
-import { MdEdit } from 'react-icons/md';
-import { MdDelete } from 'react-icons/md';
 const DataTable = () => {
-
-
   const [formData, setFormData] = useState({
     name: "",
     gender: "",
-    age: ""
+    age: "",
   });
   const [data, setData] = useState([]);
-  const [editId, setEditId] = useState(false);
 
-  useEffect(() => {
-    if (!editId) return;
-    // Find all elements in the document that have an id attribute equal to the editId value
-    let selectedItem = document.querySelectorAll(`[id="${editId}"]`);
-    // selectedItem[0].focus();
-  }, [editId]);
+  const [edit, setEdit] = useState({
+    editable: false,
+    id: null,
+    updateData: {},
+  });
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value, })
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleAddClick = () => {
@@ -37,76 +31,73 @@ const DataTable = () => {
       setData([...data, newItem]);
       setFormData({ name: "", gender: "", age: "" });
     }
-  }
+  };
 
   const handleDelete = (id) => {
     const updatedList = data.filter((item) => item.id !== id);
     setData(updatedList);
-  }
-  // console.log(formData);
-  // console.log(data);
-  const handleEdit = (id, updatedData) => {
-    if (!editId || editId !== id) return;
+  };
 
-    const updatedList = data.map((item) => (
-      item.id === id ? { ...item, ...updatedData } : item
-    ));
+  const editHandler = (item) => {
+    setEdit({ editable: true, id: item.id, updateData: item });
+  };
 
-    setData(updatedList);
-  }
-  console.log(data);
+  const saveEdit = (id) => {
+    const updatedData = data.map((item) =>
+      item.id === id ? { ...item, ...edit.updateData } : item
+    );
+    setData(updatedData);
+    setEdit({ editable: false, id: null, updateData: {} });
+  };
+
+  const handleEditChange = (e, key) => {
+    setEdit((prev) => ({
+      ...prev,
+      updateData: { ...prev.updateData, [key]: e.target.innerText },
+    }));
+  };
+
   return (
     <div>
       <div className="container">
         <div className="add-container">
           <div className="info-container">
-
-            {/* Name */}
             <input
               type="text"
-              placeholder='Name'
-              name='name'
+              placeholder="Name"
+              name="name"
               value={formData.name}
               onChange={handleInputChange}
             />
-
-
-            {/* Gender */}
             <input
               type="text"
-              placeholder='Gender'
-              name='gender'
+              placeholder="Gender"
+              name="gender"
               value={formData.gender}
               onChange={handleInputChange}
             />
-
-            {/* Age */}
             <input
               type="text"
-              placeholder='Age'
-              name='age'
+              placeholder="Age"
+              name="age"
               value={formData.age}
               onChange={handleInputChange}
             />
-
           </div>
-
-          {/* add button for adding data */}
-          <button className='add' onClick={handleAddClick}>Add</button>
+          <button className="add" onClick={handleAddClick}>
+            Add
+          </button>
         </div>
 
         <div className="search-table-container">
-
-          {/* search input */}
           <input
             type="text"
-            placeholder='Search by name'
+            placeholder="Search by name"
             value={""}
-            onChange={() => { }}
-            className='search-input'
+            onChange={() => {}}
+            className="search-input"
           />
 
-          {/* data table showing here */}
           <table>
             <thead>
               <tr>
@@ -115,70 +106,68 @@ const DataTable = () => {
                 <th>Age</th>
                 <th>Action</th>
               </tr>
-
             </thead>
-
             <tbody>
-              {/* hard code removed */}
-
-              {/*<tr>
-                <td>Ashiq</td>
-                <td>Male</td>
-                <td>24</td>
-
-                <td className='actions'>
-                  <button className='edit'><MdEdit /></button>
-                  <button className='delete'><MdDelete /></button>
-                </td>
-              </tr> */}
-
-              {
-                data ? (data.map((item) => (
-                  <tr key={item.id}>
-                    <td
-                      key={item.id}
-                      contentEditable={editId === item.id}
-                      onBlur={(e) => handleEdit(
-                        item.id, {name: e.target.innerText})}
-                    >{item.name}</td>
-                    <td
-                      key={item.id}
-                      contentEditable={editId === item.id}
-                      onBlur={(e) => handleEdit(
-                        item.id, {gender: e.target.innerText})}
-                    >{item.gender}</td>
-                    <td
-                      key={item.id}
-                      contentEditable={editId === item.id}
-                      onBlur={(e) => handleEdit(
-                        item.id, {age: e.target.innerText})}
-                    >{item.age}</td>
-
-                    <td className='actions'>
-                      <button className='edit' onClick={() => setEditId(item.id)}>
+              {data.map((item) => (
+                <tr key={item.id}>
+                  <td
+                    contentEditable={edit.editable && edit.id === item.id}
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) => handleEditChange(e, "name")}
+                  >
+                    {edit.editable && edit.id === item.id
+                      ? edit.updateData.name
+                      : item.name}
+                  </td>
+                  <td
+                    contentEditable={edit.editable && edit.id === item.id}
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) => handleEditChange(e, "gender")}
+                  >
+                    {edit.editable && edit.id === item.id
+                      ? edit.updateData.gender
+                      : item.gender}
+                  </td>
+                  <td
+                    contentEditable={edit.editable && edit.id === item.id}
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) => handleEditChange(e, "age")}
+                  >
+                    {edit.editable && edit.id === item.id
+                      ? edit.updateData.age
+                      : item.age}
+                  </td>
+                  <td className="actions">
+                    {edit.editable && edit.id === item.id ? (
+                      <button
+                        className="save edit"
+                        onClick={() => saveEdit(item.id)}
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        className="edit"
+                        onClick={() => editHandler(item)}
+                      >
                         <MdEdit />
                       </button>
-                      <button className='delete' onClick={() => handleDelete(item.id)}>
-                        <MdDelete />
-                      </button>
-                    </td>
-                  </tr>
-                ))) : null
-              }
-
-
+                    )}
+                    <button
+                      className="delete"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      <MdDelete />
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
-
-
           </table>
-
-          {/* pagination here */}
-          <div className="pagination"></div>
         </div>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default DataTable
+export default DataTable;
